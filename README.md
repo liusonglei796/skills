@@ -34,7 +34,17 @@ Curated AI agent skills for [Antigravity](https://github.com), Claude Code, and 
   * Supports automated fixing with `golangci-lint run --fix` and formatting via `gofumpt`/`goimports`.
   * Multi-agent legacy codebase incremental cleanup strategy.
 
-### 4. `codebase-design` (Deep Module & Seam Architecture)
+### 4. `golang-benchmark` (Performance Measurement & Statistical Profiling)
+* **Source**: Samber Go engineering best practices.
+* **Location**: [`skills/golang-benchmark`](./skills/golang-benchmark)
+* **Key Principles**:
+  * Micro-benchmarking with Go 1.24+ `b.Loop()` and `b.ReportAllocs()`.
+  * Statistical rigor using `benchstat` with confidence intervals & p-value testing.
+  * Direct profiling integration (`pprof` CPU/memory profiles, execution `trace`).
+  * Compiler optimization analysis (escape analysis, inlining decisions).
+  * CI regression detection to prevent performance degradation on pull requests.
+
+### 5. `codebase-design` (Deep Module & Seam Architecture)
 * **Source**: Adapted from Matt Pocock (Michael Feathers / John Ousterhout principles).
 * **Location**: [`skills/codebase-design`](./skills/codebase-design)
 * **Key Principles**:
