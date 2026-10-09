@@ -24,7 +24,17 @@ Curated AI agent skills for [Antigravity](https://github.com), Claude Code, and 
   * Integration tests separated by `//go:build integration`.
   * Mocking interfaces at system boundaries, not concrete structs.
 
-### 3. `codebase-design` (Deep Module & Seam Architecture)
+### 3. `golang-lint` (Production-Grade Go Linting & Static Analysis)
+* **Source**: Samber Go engineering best practices.
+* **Location**: [`skills/golang-lint`](./skills/golang-lint)
+* **Key Principles**:
+  * Production-ready `.golangci.yml` configuration template with 40+ enabled linters.
+  * Catches unclosed resources (`bodyclose`, `sqlclosecheck`), unhandled errors (`errcheck`, `nilerr`), and security flaws (`gosec`).
+  * Enforces proper `//nolint:linter // justification` suppression rules (`nolintlint`).
+  * Supports automated fixing with `golangci-lint run --fix` and formatting via `gofumpt`/`goimports`.
+  * Multi-agent legacy codebase incremental cleanup strategy.
+
+### 4. `codebase-design` (Deep Module & Seam Architecture)
 * **Source**: Adapted from Matt Pocock (Michael Feathers / John Ousterhout principles).
 * **Location**: [`skills/codebase-design`](./skills/codebase-design)
 * **Key Principles**:
