@@ -51,6 +51,16 @@ Curated AI agent skills for [Antigravity](https://github.com), Claude Code, and 
   * Defines the shared vocabulary for deep modules (large capability behind small interface).
   * Seam placement and adapter design.
 
+### 6. `docx` (Word Document Creation, Editing & Analysis)
+* **Source**: Anthropic Official Agent Skills (`anthropics/skills`) with Custom Template Guidelines.
+* **Location**: [`skills/docx`](./skills/docx)
+* **Key Principles**:
+  * **Template-First Modification**: Strict adherence to modifying existing templates in-place, preserving page margins, running headers/footers, styles, and section breaks. In-place substitution of placeholders.
+  * **Lossless XML Editing**: Modifies `word/document.xml` directly to maintain full fidelity of styles, headers/footers, and page layouts.
+  * **Run Coalescing**: Uses `merge_runs.py` to merge fragmented adjacent text runs so search-and-replace never misses matches.
+  * **Track Changes & Comments**: Native redlining and comment insertion with multi-file XML relationship synchronization.
+  * **Schema Validation**: Automated XSD validation against ECMA/ISO Office Open XML standards with auto-repair.
+
 ---
 
 ## 🚀 Installation & Usage
