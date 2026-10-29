@@ -20,6 +20,7 @@ license: Proprietary. LICENSE.txt has complete terms
 2. **第二优先级（次高）：原模板 XML 节点样式母版克隆 (DOM & Style Cloning)**
    - 若模板某处未写明文字格式说明，直接提取该位置原有占位段落的 `<w:pPr>`（段落样式引用 `pStyle`、行距 `spacing`、缩进 `ind`）与 `<w:rPr>`（字体 `rFonts`、字号 `sz`、加粗 `b`）作为**样式母版**。
    - **裁决原则**：
+      - **严禁过度格式化与自作主张加粗（Anti-Format-Pollution & Anti-Over-Formatting）**：很多高校/实验单的原模板中，一、实验目的、二、实验内容 或 1.1 只是普通正文段落（pStyle=Normal 或纯未加粗宋体），其原生 <w:rPr> 中**并无加粗 <w:b/>，也无大纲级别 <w:outlineLvl>**。Agent 必须 100% 忠实克隆原模板占位符节点的 <w:pPr> 与 <w:rPr>，**严禁先入为主自作主张给标题添加 <w:b/>（加黑）、严禁擅自注入 <w:outlineLvl>（导致左侧出现折叠小黑点或强行改变大纲）**。只有在原模板对应占位段落自身已显式包含 <w:b/> 或第一优先级规则有明确文字指令时才允许加粗；
      - **结构容器继承**：若原模板采用**外框大表格**包裹全文（如全篇处于 `<w:tbl>` 的合并单元格 `<w:tc>` 内），所有新增段落、代码与图片必须严格注入在对应的 `<w:tc>` 内部，严禁跳出表格或破坏表格外框与底部评分栏；
      - **大纲体系继承**：原模板使用什么编号体系（如 `一、`/`1.`、`1)`/`a)`、或 `1`/`1.1`/`1.1.1`），就顺延什么层级，不强行删减或篡改原生标题层级；
      - **目录（TOC）按层级母版克隆**：不同模板的目录排版千差万别（有的全部同一字号字体，有的“一级目录四号黑体加粗、二级小四宋体、三级五号宋体”，有的绑定主题字体如 `minorEastAsia`）。严禁对目录套用固定死格式，必须**按目录层级（Level 1/2/3）分别提取原模板既有目录项的 `<w:pPr>` 与 `<w:rPr>` 快照**作为还原母版；
@@ -57,6 +58,7 @@ license: Proprietary. LICENSE.txt has complete terms
   - **题注规范**：图题位于图片正下方居中，表题位于表格正上方居中；题注编号格式（如 `图1`、`图5-1` 或 `图5.1`）及字号（5号或小四号）优先遵循模板内示例。
 - **Step 4：XML 闭合校验、目录快照还原与编码安全 (Validation, TOC Snapshot Restoration & Encoding Safety)**
   - **XML 标签与关系校验**：重新打包 `.docx` 前，必须校验 `document.xml` 的标签栈平衡（Tag Balance）与 `document.xml.rels` 的媒体 `rId` 映射完整性；
+  - **反向格式污染审查 (Anti-Format-Pollution Check)**：在将生成段落写入 document.xml 前，必须对比原模板目标位置上下文段落的 <w:rPr> 与 <w:pPr>：若原模板对应标题/正文节点并未声明 <w:b/>，生成后的节点严禁出现 <w:b/> 或 <w:bCs/>；若原模板未设置 <w:outlineLvl>，生成后的节点严禁凭空添加大纲级别，彻底杜绝左侧出现意外折叠三角标和文字变粗；
   - **泛化目录样式快照与刷新还原闭环 (Generalized TOC Snapshot & Restoration)**：
     - **为什么不能只调 `Update()`**：许多模板作者是直接在原模板 `document.xml` 的目录段落上刷了行内格式（而非修改 `styles.xml`）。一旦调用 Word COM `TablesOfContents.Update()`，Word 会销毁原目录段落 XML，并把正文标题的直接格式（如黑体）抓取到新目录项中，同时回退到 Word 内置默认样式，导致**原模板的目录排版在刷新后丢失**。
     - **标准三步还原法（适用于任意模板）**：
